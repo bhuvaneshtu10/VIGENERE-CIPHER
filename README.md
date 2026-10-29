@@ -30,7 +30,79 @@ STEP-8: Repeat the above steps to generate the entire cipher text.
 
 
 ## PROGRAM
+```
 
+#include <stdio.h>
+#include <string.h>
+#include <ctype.h>
+
+int main()
+{
+    char plaintext[200], keyword[200];
+    char ciphertext[200];
+    int i, j, len, keylen;
+
+    printf("Enter plaintext: ");
+    fgets(plaintext, sizeof(plaintext), stdin);
+
+    printf("Enter keyword: ");
+    fgets(keyword, sizeof(keyword), stdin);
+
+    // Remove newline characters
+    plaintext[strcspn(plaintext, "\n")] = '\0';
+    keyword[strcspn(keyword, "\n")] = '\0';
+
+    len = strlen(plaintext);
+    keylen = strlen(keyword);
+
+    if (keylen == 0)
+    {
+        printf("Error: Keyword cannot be empty.\n");
+        return 1;
+    }
+
+    j = 0;
+
+    for (i = 0; i < len; i++)
+    {
+        if (isalpha((unsigned char)plaintext[i]))
+        {
+            char p = toupper((unsigned char)plaintext[i]);
+            char k;
+
+            // Repeat the keyword for alphabetic characters
+            while (!isalpha((unsigned char)keyword[j % keylen]))
+            {
+                j++;
+            }
+
+            k = toupper((unsigned char)keyword[j % keylen]);
+            ciphertext[i] =
+                ((p - 'A' + k - 'A') % 26) + 'A';
+
+            j++;
+        }
+        else
+        {
+            // Preserve spaces and punctuation
+            ciphertext[i] = plaintext[i];
+        }
+    }
+
+    ciphertext[len] = '\0';
+
+    printf("\nPlaintext  : %s", plaintext);
+    printf("\nKeyword    : %s", keyword);
+    printf("\nCiphertext : %s\n", ciphertext);
+
+    return 0;
+}
+
+```
 ## OUTPUT
 
+<img width="1165" height="525" alt="image" src="https://github.com/user-attachments/assets/1edb44ad-657d-4c15-b2e1-4844ffe68ca6" />
+
 ## RESULT
+
+Thus, the C program to implement the Vigenère cipher substitution technique was written and executed successfully, and the ciphertext was obtained for the given plaintext and keyword.
